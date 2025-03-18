@@ -1,0 +1,9 @@
+0 Ewaste
+1 Fabric
+2 Carboard
+3 Biowaste
+4 Metal
+5 Plastic
+6 Glass
+7 Paper
+8 Trash

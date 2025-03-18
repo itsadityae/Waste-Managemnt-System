@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Buy Trash</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background-color: #232f3e;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #333;
+            padding: 30px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        main {
+            padding: 20px;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        /* Unique Styles for Recycling Products */
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .product-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .product-card h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .product-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .add-to-cart {
+            background-color: #fc605b;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-to-cart:hover {
+            background-color: #fd8c87;
+        }
+        /* Cart Styles */
+        .cart-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            background-color: #fff;
+            border-left: 1px solid #ccc;
+            height: 30%;
+            overflow-y: auto;
+            padding: 20px;
+            display: none; /* Initially hidden */
+        }
+        .cart-header {
+            margin-top: 0;
+        }
+        .cart-items {
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-item button {
+            background-color: #fc605b;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .cart-item button:hover {
+            background-color: #fd8c87;
+        }
+        .cart-total {
+            font-weight: bold;
+        }
+        .checkout-btn {
+            background-color: #fc605b;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .checkout-btn:hover {
+            background-color: #fd8c87;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>BUY Trash</h1>
+</header>
+<nav>
+    <a href="/user/Home">Home</a>
+    <a href="/user/RecycleProducts">Recycling Products</a>
+    <a href="/user/SellTrash">Sell Waste</a>
+    <a href="/user/AboutWM">About Waste Management</a>
+    <a href="/user/Service">Services</a>
+    <a href="/user/Aboutus">About Us</a>
+    <a href="/user/Typeswaste">Types of Waste</a>
+</nav>
+<main>
+    <div class="product-container">
+        <div class="product-card" style="background-color:whitesmoke;">
+            <img src="/images/wasteimgs/carboardw2.jpeg" alt="Iron Rods">
+            <h2>Carboard Trash</h2>
+            <p>Quantity:500 tones Available</p>
+            <p>Price: ₹15/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Carboard Trash', 15)">Add to Cart</button>
+        </div>
+        <!-- Other product cards -->
+        <div class="product-card" style="background-color: whitesmoke;">
+            <img src="/images/wasteimgs/electronicw.jpeg" alt="Utensils">
+            <h2>Electronics Waste</h2>
+            <p>Quantity:300 Tones Available</p>
+            <p>Price: ₹200/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Eclectronics Trash', 200)">Add to Cart</button>
+        </div>
+        <div class="product-card" style="background-color: whitesmoke;">
+            <img src="/images/wasteimgs/glassw.jpeg" alt="Paper Bags">
+            <h2>Glass Trash</h2>
+            <p>Quantity:100 Tones Available</p>
+            <p>Price: ₹30/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Glass Trash', 30)">Add to Cart</button>
+        </div>
+        <div class="product-card" style="background-color: whitesmoke;">
+            <img src="/images/wasteimgs/metalw2.jpeg" alt="Organic manure">
+            <h2>Metal Trash</h2>
+            <p>Quantity:1000 Tones Available</p>
+            <p>Price: ₹150/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Metal Trash', 150)">Add to Cart</button>
+        </div>
+        <div class="product-card" style="background-color:whitesmoke;">
+            <img src="/images/wasteimgs/organicw.jpeg" alt="Study Table">
+            <h2>Organic Trash</h2>
+            <p>Quantity:10 Tones Available</p>
+            <p>Price: ₹80/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Organic Trash', 80)">Add to Cart</button>
+        </div>
+        <div class="product-card" style="background-color:whitesmoke;">
+            <img src="/images/wasteimgs/paperw.jpeg" alt="Study Table">
+            <h2>Paper Trash</h2>
+            <p>Quantity:200 Tones Available</p>
+            <p>Price: ₹10/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Paper Trash', 10)">Add to Cart</button>
+        </div>
+        <div class="product-card" style="background-color: whitesmoke;">
+            <img src="/images/wasteimgs/plasticw.jpeg" alt="Study Table">
+            <h2>Plastic Trash</h2>
+            <p>Quantity:20 Tones Available</p>
+            <p>Price: ₹12/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Plastic Trash', 12)">Add to Cart</button>
+        </div>
+        <div class="product-card" style="background-color: ;">
+            <img src="/images/wasteimgs/textilew.jpeg" alt="Study Table">
+            <h2>Textile Trash</h2>
+            <p>Quantity:2100 Tones Available</p>
+            <p>Price: ₹20/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Textile Trash', 20)">Add to Cart</button>
+        </div>
+        <div class="product-card" style="background-color: whitesmoke;">
+            <img src="/images/wasteimgs/trashw.jpeg" alt="Study Table">
+            <h2>Trash</h2>
+            <p>Quantity:1700 Tones Available</p>
+            <p>Price: ₹8/kg</p>
+            <button class="add-to-cart" onclick="addToCart('Trash', 8)">Add to Cart</button>
+        </div>
+    </div>
+</main>
+<footer>
+    <p style="color: rgb(229, 255, 0)">&copy; 2024 Waste Management System. All rights reserved.</p>
+</footer>
+
+
+<div class="cart-container">
+    <h2 class="cart-header">Shopping Cart</h2>
+    <div class="cart-items" id="cart-items">
+        <!-- Cart items will be dynamically added here -->
+    </div>
+    <p class="cart-total">Total: ₹<span id="cart-total">0</span></p>
+    <!-- Input fields for name and delivery address -->
+    <input type="text" id="name" placeholder="Enter Your Name">
+    <input type="text" id="street" placeholder="Street Address">
+    <input type="text" id="city" placeholder="City">
+    <input type="text" id="pincode" placeholder="Pincode">
+    <input type="text" id="state" placeholder="State">
+
+    <button class="checkout-btn" onclick="proceedToPayment()">Proceed to Payment</button>
+</div>
+
+<script>
+    
+    var cart = [];
+
+    function addToCart(productName, price) {
+        cart.push({ name: productName, price: price });
+        updateCartUI();
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        var cartItemsElement = document.getElementById('cart-items');
+        var cartTotalElement = document.getElementById('cart-total');
+        var total = 0;
+        cartItemsElement.innerHTML = '';
+        cart.forEach(function(item, index) {
+            total += item.price;
+            var cartItemElement = document.createElement('div');
+            cartItemElement.classList.add('cart-item');
+            cartItemElement.textContent = item.name + ' - ₹' + item.price;
+            var removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function() {
+                removeFromCart(index);
+            };
+            cartItemElement.appendChild(removeButton);
+            cartItemsElement.appendChild(cartItemElement);
+        });
+        cartTotalElement.textContent = total;
+        document.querySelector('.cart-container').style.display = 'block';
+    }
+
+    function proceedToPayment() {
+        var name = document.getElementById('name').value;
+        var street = document.getElementById('street').value;
+        var city = document.getElementById('city').value;
+        var pincode = document.getElementById('pincode').value;
+        var state = document.getElementById('state').value;
+
+        console.log("Name:", name);
+
+        // Ensure name and address are provided
+        if (name.trim() === '' || street.trim() === '' || city.trim() === '' || pincode.trim() === '' || state.trim() === '') {
+            alert('Please provide your name and complete address.');
+            return;
+        }
+
+        // Calculate total amount
+        var totalAmount = 0;
+        cart.forEach(function(item) {
+            totalAmount += item.price;
+        });
+
+        // Proceed to payment using Razorpay
+        var options = {
+            "key": "rzp_test_6NrSFcJVLSBG4u",
+            "amount": totalAmount * 100,
+            "currency": "INR",
+            "name": "EcoInfinite Nexus",
+            "description": "Payment for Buy Trash",
+            "image": "/images/2.jpeg",
+            "handler": function (response) {
+                // Handle successful payment here
+                alert("Payment successful!");
+                var order_id = response.razorpay_payment_id;
+                window.location.href = "/user/confirmationpage?order_id=" + order_id + "&totalAmount=" + totalAmount + "&name=" + name + "&address=" + street + ", " + city + ", " + pincode + ", " + state;
+            },
+            "prefill": {
+                "name": "name",
+                "email": "your_email@example.com",
+                "contact": "Your Contact Number"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp = new Razorpay(options);
+        rzp.open();
+    }
+</script>
+
+</script>
+</body>
+</html>
+

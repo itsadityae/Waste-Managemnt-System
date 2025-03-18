@@ -1,0 +1,276 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Classification</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</head>
+<body>
+    <body>
+        <div class="container">
+            <h1>Waste Classification</h1>
+            <input type="file" id="imageUpload" accept="image/*">
+            <button id="predictButton">Predict</button>
+            <div id="predictionResult"></div>
+        </div>
+    <script>
+        let model;
+        const class_names = ['Ewaste', 'Fabric', 'Carboard', 'Biowaste','Metal','Plastic','Glass','Paper','Trash']; 
+
+        window.onload = async () => {
+            model = await tf.loadLayersModel('/images/home/model.json');
+        };
+
+        document.getElementById('predictButton').addEventListener('click', async () => {
+            const imageUpload = document.getElementById('imageUpload');
+            if (imageUpload.files.length > 0) {
+                const image = await loadImage(imageUpload.files[0]);
+                const prediction = model.predict(image);
+                displayPrediction(prediction);
+            }
+        });
+
+        function loadImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const tensor = tf.browser.fromPixels(img)
+                            .resizeNearestNeighbor([224, 224])
+                            .toFloat()
+                            .sub(tf.scalar(127.5)).div(tf.scalar(127.5))
+                            .expandDims();
+                        resolve(tensor);
+                    };
+                    img.onerror = reject;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function displayPrediction(prediction) {
+            const predictionResult = document.getElementById('predictionResult');
+            prediction.array().then(array => {
+                let results = '';
+                for (let i = 0; i < class_names.length; i++) {
+                    results += `${class_names[i]}: ${(array[0][i] * 100).toFixed(2)}%<br>`;
+                }
+                predictionResult.innerHTML = results;
+            });
+        }
+    </script>
+     
+    <style>
+        /* Use a gradient background for the body */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Style the container for a card-like appearance */
+        .container {
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        /* Style the file input and predict button with vibrant colors */
+        #imageUpload {
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 2px solid #007bff;
+        }
+
+        #predictButton {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #predictButton:hover {
+            background-color: #e64a19;
+        }
+
+        /* Style the prediction result with a colorful border */
+        #predictionResult {
+            margin-top: 20px;
+            padding: 0px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            width: 100%;
+            border: 3px solid #ffeb3b;
+        }
+    </style>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Classification</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Waste Classification</h1>
+        <input type="file" id="imageUpload" accept="image/*">
+        <button id="predictButton" disabled>Predict</button>
+        <div id="predictionResult"></div>
+    </div>
+
+    <script>
+        let model;
+        const class_names = ['Ewaste', 'Fabric', 'Carboard', 'Biowaste', 'Metal', 'Plastic', 'Glass', 'Paper', 'Trash'];
+
+        window.onload = async () => {
+            model = await tf.loadLayersModel('/images/home/model.json');
+            // Enable the predict button after the model is loaded
+            document.getElementById('predictButton').disabled = false;
+        };
+
+        document.getElementById('predictButton').addEventListener('click', async () => {
+            const imageUpload = document.getElementById('imageUpload');
+            if (imageUpload.files.length > 0) {
+                const image = await loadImage(imageUpload.files[0]);
+                const prediction = model.predict(image);
+                displayPrediction(prediction);
+            }
+        });
+
+        function loadImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const resizedCanvas = resizeImage(img, 224, 224); // Resize image to 224x224
+                        const tensor = tf.browser.fromPixels(resizedCanvas)
+                            .toFloat()
+                            .sub(tf.scalar(127.5)).div(tf.scalar(127.5))
+                            .expandDims();
+                        resolve(tensor);
+                    };
+                    img.onerror = reject;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function resizeImage(img, width, height) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let aspectRatio = img.width / img.height;
+            let newWidth = width;
+            let newHeight = height;
+
+            if (aspectRatio > 1) {
+                newHeight = width / aspectRatio;
+            } else {
+                newWidth = height * aspectRatio;
+            }
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            return canvas;
+        }
+
+        function displayPrediction(prediction) {
+            const predictionResult = document.getElementById('predictionResult');
+            prediction.array().then(array => {
+                let results = '';
+                for (let i = 0; i < class_names.length; i++) {
+                    results += `${class_names[i]}: ${(array[0][i] * 100).toFixed(2)}%<br>`;
+                }
+                predictionResult.innerHTML = results;
+            });
+        }
+    </script>
+
+    <style>
+        /* Use a gradient background for the body */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Style the container for a card-like appearance */
+        .container {
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        /* Style the file input and predict button with vibrant colors */
+        #imageUpload {
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 2px solid #007bff;
+        }
+
+        #predictButton {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #predictButton:hover {
+            background-color: #e64a19;
+        }
+
+        /* Style the prediction result with a colorful border */
+        #predictionResult {
+            margin-top: 20px;
+            padding: 0px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            width: 100%;
+            border: 3px solid #ffeb3b;
+        }
+    </style>
+</body>
+</html>

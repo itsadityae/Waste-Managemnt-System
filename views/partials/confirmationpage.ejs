@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #e35f0e;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .order-details {
+            border-top: 2px solid #c2305d;
+            padding-top: 20px;
+        }
+        .order-id,
+        .total-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #009688;
+        }
+        .total-amount {
+            color: #009688;
+        }
+        span {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Confirmation</h1>
+        <p>Thank you for your purchase!</p>
+        
+        <div class="order-details">
+            <h2>Order Details:</h2>
+            <p><strong>Order ID:</strong> <span class="order-id" id="order-id"></span></p>
+            <p><strong>Total Amount:</strong> ₹<span class="total-amount" id="total-amount"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Parse the order details from the URL parameters
+        var urlParams = new URLSearchParams(window.location.search);
+        var orderId = urlParams.get('order_id'); // Change to 'order_id'
+        var totalAmount = urlParams.get('totalAmount');
+
+        // Display the order details on the page
+        document.getElementById('order-id').textContent = orderId;
+        document.getElementById('total-amount').textContent = totalAmount;
+    </script>
+</body>
+</html>
