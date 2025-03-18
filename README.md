@@ -1,4 +1,4 @@
-# Waste-Managemnt-System
+# Waste-Management-System
 ML-Based Waste Management System
 
 I have worked on a Waste Management System, a one-stop solution for comprehensive waste management across India.
